@@ -8,9 +8,9 @@ let collectionChart = null;
 
 // Google Sheets Configuration
 const GOOGLE_SHEETS_CONFIG = {
-    // Replace these with your actual Google Sheets URLs
-    financeSheetUrl: 'https://docs.google.com/spreadsheets/d/YOUR_FINANCE_SHEET_ID/pub?output=csv',
-    eventsSheetUrl: 'https://docs.google.com/spreadsheets/d/YOUR_EVENTS_SHEET_ID/pub?output=csv',
+    // Updated Google Sheets URLs for finance and events data
+    financeSheetUrl: 'https://docs.google.com/spreadsheets/d/1wD6e_s4OBn82v6rZ2qBmKCuss6_Tb51X3h1sq71OrUA/pub?output=csv',
+    eventsSheetUrl: 'https://docs.google.com/spreadsheets/d/1Yh4B2A3arpPWk7ygb9XH0B5Pzq_Mho_uyyVXk6ecYzU/pub?output=csv',
     // Auto-refresh interval in milliseconds (5 minutes)
     refreshInterval: 300000
 };
@@ -52,7 +52,7 @@ async function loadDataFromGoogleSheets() {
         showNotification('Loading data from Google Sheets...', 'info');
         
         // Load finance data
-        if (GOOGLE_SHEETS_CONFIG.financeSheetUrl !== 'https://docs.google.com/spreadsheets/d/YOUR_FINANCE_SHEET_ID/pub?output=csv') {
+        try {
             const financeResponse = await fetch(GOOGLE_SHEETS_CONFIG.financeSheetUrl);
             if (financeResponse.ok) {
                 const financeCsv = await financeResponse.text();
@@ -62,10 +62,13 @@ async function loadDataFromGoogleSheets() {
                 console.error('Failed to load finance data from Google Sheets');
                 loadSampleData(); // Fallback to sample data
             }
+        } catch (error) {
+            console.error('Error fetching finance data:', error);
+            loadSampleData(); // Fallback to sample data
         }
         
         // Load events data
-        if (GOOGLE_SHEETS_CONFIG.eventsSheetUrl !== 'https://docs.google.com/spreadsheets/d/YOUR_EVENTS_SHEET_ID/pub?output=csv') {
+        try {
             const eventsResponse = await fetch(GOOGLE_SHEETS_CONFIG.eventsSheetUrl);
             if (eventsResponse.ok) {
                 const eventsCsv = await eventsResponse.text();
@@ -75,6 +78,9 @@ async function loadDataFromGoogleSheets() {
                 console.error('Failed to load events data from Google Sheets');
                 loadSampleData(); // Fallback to sample data
             }
+        } catch (error) {
+            console.error('Error fetching events data:', error);
+            loadSampleData(); // Fallback to sample data
         }
         
         updateDashboard();
@@ -615,4 +621,4 @@ const countdownStyles = `
 </style>
 `;
 
-document.head.insertAdjacentHTML('beforeend', countdownStyles); 
+document.head.insertAdjacentHTML('beforeend', countdownStyles);

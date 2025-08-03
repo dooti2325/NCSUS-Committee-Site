@@ -37,10 +37,11 @@ Netaji Colony Sarbajanin Utsav Samiti/
 ```
 
 ### 2. Running the Application
-1. Open `index.html` in a modern web browser (Chrome, Firefox, Safari, Edge)
-2. The dashboard will load with sample data automatically
-3. Use the file upload section to load your own data
-4. **For Google Sheets Integration**: Follow the setup guide in `GOOGLE_SHEETS_SETUP.md`
+1. Start the local server by running `python server.py`
+2. The dashboard will automatically open in your default browser
+3. The dashboard will load data from the configured Google Sheets automatically
+4. If Google Sheets data is unavailable, it will fall back to sample data
+5. **Google Sheets Integration**: Already configured with sample sheets. See `GOOGLE_SHEETS_SETUP.md` for customization
 
 ### 3. Data Format Requirements
 
@@ -187,4 +188,4 @@ For technical support or customization requests:
 ---
 
 **Developed for Netaji Colony Sarbajanin Utsav Samiti**  
-*May Goddess Durga bless us all! 🕉️* 
+*May Goddess Durga bless us all! 🕉️*

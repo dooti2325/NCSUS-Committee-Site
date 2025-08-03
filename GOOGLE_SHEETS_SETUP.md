@@ -58,9 +58,9 @@ Open `script.js` and update the `GOOGLE_SHEETS_CONFIG`:
 
 ```javascript
 const GOOGLE_SHEETS_CONFIG = {
-    // Replace with your actual Google Sheets URLs
-    financeSheetUrl: 'https://docs.google.com/spreadsheets/d/YOUR_FINANCE_SHEET_ID/pub?output=csv',
-    eventsSheetUrl: 'https://docs.google.com/spreadsheets/d/YOUR_EVENTS_SHEET_ID/pub?output=csv',
+    // Updated Google Sheets URLs for finance and events data
+    financeSheetUrl: 'https://docs.google.com/spreadsheets/d/1wD6e_s4OBn82v6rZ2qBmKCuss6_Tb51X3h1sq71OrUA/pub?output=csv',
+    eventsSheetUrl: 'https://docs.google.com/spreadsheets/d/1Yh4B2A3arpPWk7ygb9XH0B5Pzq_Mho_uyyVXk6ecYzU/pub?output=csv',
     refreshInterval: 300000 // 5 minutes
 };
 ```
@@ -141,4 +141,4 @@ If you encounter issues:
 1. Check browser console for errors
 2. Verify your Google Sheets URLs
 3. Ensure your sheets are published to web
-4. Check that your data format matches the requirements 
+4. Check that your data format matches the requirements
