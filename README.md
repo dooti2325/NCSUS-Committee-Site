@@ -42,6 +42,11 @@ Netaji Colony Sarbajanin Utsav Samiti/
 3. The dashboard will load data from the configured Google Sheets automatically
 4. If Google Sheets data is unavailable, it will fall back to sample data
 5. **Google Sheets Integration**: Already configured with sample sheets. See `GOOGLE_SHEETS_SETUP.md` for customization
+1. Start the local server by running `python server.py`
+2. The dashboard will automatically open in your default browser
+3. The dashboard will load data from the configured Google Sheets automatically
+4. If Google Sheets data is unavailable, it will fall back to sample data
+5. **Google Sheets Integration**: Already configured with sample sheets. See `GOOGLE_SHEETS_SETUP.md` for customization
 
 ### 3. Data Format Requirements
 

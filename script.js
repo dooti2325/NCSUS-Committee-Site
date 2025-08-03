@@ -9,8 +9,8 @@ let collectionChart = null;
 // Google Sheets Configuration
 const GOOGLE_SHEETS_CONFIG = {
     // Updated Google Sheets URLs for finance and events data
-    financeSheetUrl: 'https://docs.google.com/spreadsheets/d/1wD6e_s4OBn82v6rZ2qBmKCuss6_Tb51X3h1sq71OrUA/pub?output=csv',
-    eventsSheetUrl: 'https://docs.google.com/spreadsheets/d/1Yh4B2A3arpPWk7ygb9XH0B5Pzq_Mho_uyyVXk6ecYzU/pub?output=csv',
+    financeSheetUrl: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQVGox77jAxaIaOiP7BcFVSju01tkDgcDAh7yFgzXEFNdFnADIVYq75blbiA7m12akLWHKbwbbag5k2/pub?output=csv',
+    eventsSheetUrl: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSOCtcARb_U7UAs-bU4k24KzQ7oXEMahspOyCPdVX0pJ0yn_iY03DRwAnqAyj9MxYEJiqycsy96yyR_/pub?output=csv',
     // Auto-refresh interval in milliseconds (5 minutes)
     refreshInterval: 300000
 };
@@ -35,11 +35,7 @@ function initializeDashboard() {
 
 // Setup event listeners
 function setupEventListeners() {
-    // File upload listeners (kept for fallback)
-    document.getElementById('financeFile').addEventListener('change', handleFinanceFileUpload);
-    document.getElementById('eventsFile').addEventListener('change', handleEventsFileUpload);
-    
-    // Manual refresh button (if you add one)
+    // Manual refresh button
     const refreshBtn = document.getElementById('refreshData');
     if (refreshBtn) {
         refreshBtn.addEventListener('click', loadDataFromGoogleSheets);
@@ -60,11 +56,13 @@ async function loadDataFromGoogleSheets() {
                 showNotification('Finance data loaded from Google Sheets!', 'success');
             } else {
                 console.error('Failed to load finance data from Google Sheets');
-                loadSampleData(); // Fallback to sample data
+                showNotification('Failed to load finance data from Google Sheets. Please check your connection and sheet URL.', 'error');
+                financeData = []; // Initialize with empty array instead of sample data
             }
         } catch (error) {
             console.error('Error fetching finance data:', error);
-            loadSampleData(); // Fallback to sample data
+            showNotification('Error fetching finance data from Google Sheets. Please check your connection and sheet URL.', 'error');
+            financeData = []; // Initialize with empty array instead of sample data
         }
         
         // Load events data
@@ -76,19 +74,23 @@ async function loadDataFromGoogleSheets() {
                 showNotification('Events data loaded from Google Sheets!', 'success');
             } else {
                 console.error('Failed to load events data from Google Sheets');
-                loadSampleData(); // Fallback to sample data
+                showNotification('Failed to load events data from Google Sheets. Please check your connection and sheet URL.', 'error');
+                eventsData = []; // Initialize with empty array instead of sample data
             }
         } catch (error) {
             console.error('Error fetching events data:', error);
-            loadSampleData(); // Fallback to sample data
+            showNotification('Error fetching events data from Google Sheets. Please check your connection and sheet URL.', 'error');
+            eventsData = []; // Initialize with empty array instead of sample data
         }
         
         updateDashboard();
         
     } catch (error) {
         console.error('Error loading data from Google Sheets:', error);
-        showNotification('Error loading data from Google Sheets. Using sample data.', 'warning');
-        loadSampleData(); // Fallback to sample data
+        showNotification('Error loading data from Google Sheets. Please check your connection and sheet URLs.', 'error');
+        financeData = [];
+        eventsData = [];
+        updateDashboard();
     }
 }
 
@@ -132,105 +134,10 @@ function processCsvData(csvText, dataType) {
     return data;
 }
 
-// Handle finance file upload (fallback)
-function handleFinanceFileUpload(event) {
-    const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            try {
-                const data = new Uint8Array(e.target.result);
-                const workbook = XLSX.read(data, { type: 'array' });
-                const sheetName = workbook.SheetNames[0];
-                const worksheet = workbook.Sheets[sheetName];
-                const jsonData = XLSX.utils.sheet_to_json(worksheet);
-                
-                financeData = processFinanceData(jsonData);
-                updateDashboard();
-                showNotification('Finance data loaded successfully!', 'success');
-            } catch (error) {
-                showNotification('Error loading finance data: ' + error.message, 'error');
-            }
-        };
-        reader.readAsArrayBuffer(file);
-    }
-}
+// File upload handlers and processors have been removed as we now only use Google Sheets data
 
-// Handle events file upload (fallback)
-function handleEventsFileUpload(event) {
-    const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            try {
-                const data = new Uint8Array(e.target.result);
-                const workbook = XLSX.read(data, { type: 'array' });
-                const sheetName = workbook.SheetNames[0];
-                const worksheet = workbook.Sheets[sheetName];
-                const jsonData = XLSX.utils.sheet_to_json(worksheet);
-                
-                eventsData = processEventsData(jsonData);
-                updateDashboard();
-                showNotification('Events data loaded successfully!', 'success');
-            } catch (error) {
-                showNotification('Error loading events data: ' + error.message, 'error');
-            }
-        };
-        reader.readAsArrayBuffer(file);
-    }
-}
-
-// Process finance data from Excel (fallback)
-function processFinanceData(data) {
-    return data.map(item => ({
-        type: item.Type || item.type || 'Collection',
-        category: item.Category || item.category || 'Other',
-        amount: parseFloat(item.Amount || item.amount || 0),
-        date: item.Date || item.date || new Date().toISOString().split('T')[0],
-        description: item.Description || item.description || '',
-        source: item.Source || item.source || ''
-    }));
-}
-
-// Process events data from Excel (fallback)
-function processEventsData(data) {
-    return data.map(item => ({
-        title: item.Title || item.title || 'Event',
-        date: item.Date || item.date || new Date().toISOString().split('T')[0],
-        time: item.Time || item.time || '00:00',
-        description: item.Description || item.description || '',
-        location: item.Location || item.location || '',
-        status: item.Status || item.status || 'Scheduled'
-    }));
-}
-
-// Load sample data for demonstration
-function loadSampleData() {
-    // Sample finance data
-    financeData = [
-        { type: 'Collection', category: 'Sponsors', amount: 50000, date: '2024-10-01', description: 'Corporate Sponsorship', source: 'ABC Corp' },
-        { type: 'Collection', category: 'Community Donation', amount: 25000, date: '2024-10-02', description: 'Community Collection', source: 'Local Residents' },
-        { type: 'Collection', category: 'Others', amount: 15000, date: '2024-10-03', description: 'Miscellaneous', source: 'Various' },
-        { type: 'Spending', category: 'Decor', amount: 30000, date: '2024-10-05', description: 'Pandal Decoration', source: 'Decor Company' },
-        { type: 'Spending', category: 'Prasad', amount: 20000, date: '2024-10-06', description: 'Food Items', source: 'Catering' },
-        { type: 'Spending', category: 'Artists', amount: 25000, date: '2024-10-07', description: 'Cultural Program', source: 'Artist Group' },
-        { type: 'Spending', category: 'Lighting', amount: 15000, date: '2024-10-08', description: 'Electrical Work', source: 'Electrician' }
-    ];
-
-    // Sample events data
-    eventsData = [
-        { title: 'Mahalaya', date: '2024-10-12', time: '05:00', description: 'Mahalaya Amavasya - Beginning of Durga Puja', location: 'Main Pandal', status: 'Scheduled' },
-        { title: 'Shashthi', date: '2024-10-16', time: '06:00', description: 'Goddess Durga arrives with her children', location: 'Main Pandal', status: 'Scheduled' },
-        { title: 'Saptami', date: '2024-10-17', time: '06:00', description: 'First day of Durga Puja', location: 'Main Pandal', status: 'Scheduled' },
-        { title: 'Ashtami', date: '2024-10-18', time: '06:00', description: 'Sandhi Puja and Kumari Puja', location: 'Main Pandal', status: 'Scheduled' },
-        { title: 'Navami', date: '2024-10-19', time: '06:00', description: 'Maha Navami Puja', location: 'Main Pandal', status: 'Scheduled' },
-        { title: 'Dashami', date: '2024-10-20', time: '06:00', description: 'Vijaya Dashami - Immersion', location: 'River Ghat', status: 'Scheduled' },
-        { title: 'Cultural Program', date: '2024-10-18', time: '19:00', description: 'Evening cultural performances', location: 'Community Hall', status: 'Scheduled' },
-        { title: 'Community Feast', date: '2024-10-19', time: '12:00', description: 'Community lunch for all', location: 'Community Ground', status: 'Scheduled' }
-    ];
-
-    updateDashboard();
-}
+// This function has been removed as we now only use Google Sheets data
+// The sample data functionality has been removed to ensure only real data is displayed
 
 // Update dashboard with current data
 function updateDashboard() {
@@ -511,24 +418,7 @@ function updateCountdown() {
     }
 }
 
-// Load data function (called from HTML)
-function loadData() {
-    const financeFile = document.getElementById('financeFile').files[0];
-    const eventsFile = document.getElementById('eventsFile').files[0];
-    
-    if (!financeFile && !eventsFile) {
-        showNotification('Please select at least one file to load data.', 'warning');
-        return;
-    }
-    
-    if (financeFile) {
-        handleFinanceFileUpload({ target: { files: [financeFile] } });
-    }
-    
-    if (eventsFile) {
-        handleEventsFileUpload({ target: { files: [eventsFile] } });
-    }
-}
+// Load data function has been removed as we now only use Google Sheets data
 
 // Export data function
 function exportData() {
