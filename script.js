@@ -12,7 +12,7 @@ const GOOGLE_SHEETS_CONFIG = {
     financeSheetUrl: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQVGox77jAxaIaOiP7BcFVSju01tkDgcDAh7yFgzXEFNdFnADIVYq75blbiA7m12akLWHKbwbbag5k2/pub?output=csv',
     eventsSheetUrl: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSOCtcARb_U7UAs-bU4k24KzQ7oXEMahspOyCPdVX0pJ0yn_iY03DRwAnqAyj9MxYEJiqycsy96yyR_/pub?output=csv',
     // Auto-refresh interval in milliseconds (5 minutes)
-    refreshInterval: 30000
+    refreshInterval: 300000
 };
 
 // Initialize the application
@@ -34,6 +34,9 @@ function initializeDashboard() {
 }
 
 // Setup event listeners
+setInterval(function() {
+    document.getElementById("refreshData").click();
+}, 100000); 
 function setupEventListeners() {
     // Manual refresh button
     const refreshBtn = document.getElementById('refreshData');
@@ -53,7 +56,7 @@ async function loadDataFromGoogleSheets() {
             if (financeResponse.ok) {
                 const financeCsv = await financeResponse.text();
                 financeData = processCsvData(financeCsv, 'finance');
-                showNotification('Finance data loaded from Google Sheets!', 'success');
+                //showNotification('Finance data loaded from Google Sheets!', 'success');
             } else {
                 console.error('Failed to load finance data from Google Sheets');
                 showNotification('Failed to load finance data from Google Sheets. Please check your connection and sheet URL.', 'error');
@@ -71,7 +74,7 @@ async function loadDataFromGoogleSheets() {
             if (eventsResponse.ok) {
                 const eventsCsv = await eventsResponse.text();
                 eventsData = processCsvData(eventsCsv, 'events');
-                showNotification('Events data loaded from Google Sheets!', 'success');
+                //showNotification('Events data loaded from Google Sheets!', 'success');
             } else {
                 console.error('Failed to load events data from Google Sheets');
                 showNotification('Failed to load events data from Google Sheets. Please check your connection and sheet URL.', 'error');

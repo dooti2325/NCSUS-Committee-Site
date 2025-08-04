@@ -363,6 +363,38 @@ body {
     }
 }
 
+/* Extra Small Devices (max-width: 480px) */
+@media (max-width: 480px) {
+    .hero-section h1,
+    .section-title {
+        font-size: 1.5rem;
+    }
+    .feature-card,
+    .event-card,
+    .stat-card {
+        padding: 1rem;
+        font-size: 0.95rem;
+    }
+    .hero-image img {
+        max-width: 90vw;
+        height: auto;
+    }
+    .navbar-brand {
+        font-size: 1.1rem;
+    }
+}
+
+/* Large Screens (min-width: 1400px) */
+@media (min-width: 1400px) {
+    .container,
+    .container-fluid {
+        max-width: 1400px;
+    }
+    .hero-section {
+        min-height: 70vh;
+    }
+}
+
 /* Animations */
 @keyframes fadeInUp {
     from {
@@ -397,4 +429,4 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
     background: var(--maroon-dark);
-} 
+}

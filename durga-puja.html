@@ -9,6 +9,8 @@
     <link href="durga-puja-styles.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 </head>
 <body>
     <!-- Navigation -->
@@ -31,11 +33,6 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="sports.html">Sports Events</a>
-                    </li>
-                    <li class="nav-item ms-2">
-                        <button id="refreshData" class="btn btn-primary btn-sm">
-                            <i class="fas fa-sync-alt me-1"></i>Refresh Data
-                        </button>
                     </li>
                 </ul>
             </div>
@@ -167,12 +164,12 @@
             </div>
         </div>
 
-        <!-- Export Data Button -->
+        <!-- Refresh Data Button -->
         <div class="row mb-4">
             <div class="col-12 text-end">
-                <button class="btn btn-success" onclick="exportData()">
-                    <i class="fas fa-download me-2"></i>Export Data
-                </button>
+                <button id="refreshData" class="btn btn-primary btn-sm" onclick="dosomethint()">
+                    <i class="fas fa-sync-alt me-2"></i>Refresh Data
+                </button>  
             </div>
         </div>
     </div>
@@ -182,7 +179,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-12 text-center">
-                    <p>&copy; 2024 Netaji Colony Sarbajanin Utsav Samiti. All rights reserved.</p>
+                    <p>&copy; 2025 Netaji Colony Sarbajanin Utsav Samiti. All rights reserved.</p>
                 </div>
             </div>
         </div>
